@@ -12,24 +12,55 @@ html {
   display: none !important;
 }
 
+/* 核心优化：图表高度缩小，一屏可看全 */
 canvas {
   max-width: 100%;
-  height: auto !important;
+  height: 200px !important; /* 从300px缩到200px，减少纵向占用 */
 }
 
+/* 优化页面间距，减少滚动 */
+main {
+  max-width: 90% !important; /* 加宽内容区，减少横向换行 */
+  margin: 0 auto !important;
+  padding: 1rem !important; /* 减少内边距 */
+}
+
+section {
+  margin-bottom: 2rem !important; /* 减少章节间距，从16px→32px */
+  padding: 0 !important;
+}
+
+h2 {
+  font-size: 1.5rem !important; /* 缩小标题字号 */
+  margin-bottom: 1rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+h3 {
+  font-size: 1.1rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+p {
+  font-size: 0.9rem !important;
+  line-height: 1.4 !important;
+  margin-bottom: 1rem !important;
+}
+
+/* 响应式适配：手机端更紧凑 */
 @media (max-width: 768px) {
   h1 {
-    font-size: 2rem !important;
+    font-size: 1.8rem !important;
   }
   h2 {
-    font-size: 1.5rem !important;
+    font-size: 1.2rem !important;
   }
-  .p-8 {
-    padding: 1rem !important;
+  canvas {
+    height: 180px !important; /* 手机端图表更矮 */
   }
   .py-16 {
-    padding-top: 4rem !important;
-    padding-bottom: 4rem !important;
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
   }
 }
 
