@@ -1,0 +1,22 @@
+{
+  "claim": {
+    "avg": 18.6,
+    "median": 15.0,
+    "max": 120.0,
+    "min": 0.5,
+    "cases": 108
+  },
+  "judgment": {
+    "avg": 6.2,
+    "median": 5.0,
+    "max": 30.0,
+    "min": 0,
+    "cases": 108
+  },
+  "difference": {
+    "avg": 12.4,
+    "median": 9.8,
+    "max": 90.0,
+    "min": -2.0
+  }
+}
