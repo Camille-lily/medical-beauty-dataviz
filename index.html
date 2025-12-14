@@ -4,35 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>医美维权数据新闻（2024-2025）</title>
+  <!-- 引入Tailwind CSS（响应式布局） -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入Chart.js（基础图表） -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <!-- 引入ECharts（中国地图专用） -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <!-- 引入Chart.js热力图插件 -->
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-heatmap@4.2.0/build/index.umd.min.js"></script>
+  <!-- 引入自定义样式 -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-gray-50 font-sans text-gray-800">
+  <!-- 导航栏（新增地区分布入口） -->
   <nav class="sticky top-0 bg-white shadow-sm p-4 z-10">
     <div class="max-w-4xl mx-auto flex justify-between items-center">
       <a href="#home" class="text-red-600 font-bold text-lg">医美维权数据新闻</a>
-     <div class="hidden md:flex space-x-6 text-sm">
-  <a href="#home" class="hover:text-red-600 transition">首页</a>
-  <a href="#source" class="hover:text-red-600 transition">数据来源</a>
-  <a href="#area" class="hover:text-red-600 transition">地区分布</a> <!-- 新增这行 -->
-  <a href="#success" class="hover:text-red-600 transition">维权成功率</a>
-  <a href="#amount" class="hover:text-red-600 transition">金额差异</a>
-  <a href="#defendant" class="hover:text-red-600 transition">责任方分析</a>
-  <a href="#risk" class="hover:text-red-600 transition">高危项目</a>
-  <a href="#suggestion" class="hover:text-red-600 transition">维权建议</a>
-</div>
+      <!-- 电脑端导航 -->
+      <div class="hidden md:flex space-x-6 text-sm">
+        <a href="#home" class="hover:text-red-600 transition">首页</a>
+        <a href="#source" class="hover:text-red-600 transition">数据来源</a>
+        <a href="#area" class="hover:text-red-600 transition">地区分布</a>
+        <a href="#success" class="hover:text-red-600 transition">维权成功率</a>
+        <a href="#amount" class="hover:text-red-600 transition">金额差异</a>
+        <a href="#defendant" class="hover:text-red-600 transition">责任方分析</a>
+        <a href="#risk" class="hover:text-red-600 transition">高危项目</a>
+        <a href="#suggestion" class="hover:text-red-600 transition">维权建议</a>
+      </div>
+      <!-- 移动端导航（简化） -->
       <button class="md:hidden text-gray-700" onclick="alert('请滑动页面查看各章节')">菜单</button>
     </div>
   </nav>
 
+  <!-- 核心内容区 -->
   <main class="max-w-4xl mx-auto p-4 md:p-8">
+    <!-- 封面页 -->
     <section id="home" class="py-16 text-center mb-16">
       <h1 class="text-3xl md:text-4xl font-bold mb-4">医美维权有多难？</h1>
       <h2 class="text-xl md:text-2xl text-gray-600 mb-8">108份裁判文书揭示：仅15%消费者全额获赔</h2>
       <p class="text-gray-500">数据来源：中国裁判文书网（2024-2025）</p>
     </section>
 
+    <!-- 数据来源页 -->
     <section id="source" class="mb-16">
       <h2 class="text-2xl font-bold mb-6 pb-2 border-b border-gray-200">数据来源说明</h2>
       <p class="text-gray-700 mb-4">
@@ -45,26 +58,32 @@
           <li>维权结果：判决结果、诉求金额、判决金额</li>
           <li>责任方特征：被告身份、资质情况</li>
           <li>高风险项目：手术类、注射类等服务类型及纠纷原因</li>
+          <li>地域分布：12个省份的案件数量及占比</li>
         </ul>
       </div>
     </section>
-<section id="area" class="mb-16">
-  <h2 class="text-2xl font-bold mb-6 pb-2 border-b border-gray-200">地区分布：京津冀/长三角占比超45%，东北纠纷率最高</h2>
-  <p class="text-gray-700 mb-6">108起纠纷中，北京、上海占比46.3%，辽宁（东北）纠纷率达25.5%，远超全国平均水平。</p>
-  
-  <figure class="bg-white p-4 rounded-lg shadow-sm mb-6">
-    <h3 class="text-lg font-semibold text-gray-700 mb-4">图8：2024-2025年医美纠纷地区分布</h3>
-    <canvas id="areaChart" class="w-full h-[200px]"></canvas>
-    <p class="text-xs text-gray-500 mt-2">提示：hover柱子查看案件数+占比</p>
-  </figure>
-</section>
+
+    <!-- 新增：地区分布章节（条形图→中国地图） -->
+    <section id="area" class="mb-16">
+      <h2 class="text-2xl font-bold mb-6 pb-2 border-b border-gray-200">地区分布：京津冀/长三角占比超45%，东北纠纷率最高</h2>
+      <p class="text-gray-700 mb-6">108起纠纷中，北京、上海占比46.3%，辽宁（东北）纠纷率达25.5%，远超全国平均水平；西部省份案件数量较少，整体呈现“东多西少”分布特征。</p>
+      
+      <figure class="bg-white p-4 rounded-lg shadow-sm mb-6">
+        <h3 class="text-lg font-semibold text-gray-700 mb-4">图8：2024-2025年医美纠纷地区分布（颜色越深案件越多）</h3>
+        <!-- 中国地图容器（替换原canvas） -->
+        <div id="areaChart" class="w-full h-[300px]"></div>
+        <p class="text-xs text-gray-500 mt-2">提示：hover省份查看案件数+占比</p>
+      </figure>
+    </section>
+
+    <!-- 维权成功率页 -->
     <section id="success" class="mb-16">
       <h2 class="text-2xl font-bold mb-6 pb-2 border-b border-gray-200">医美维权有多难？仅15.7%全额胜诉</h2>
-      <p class="text-gray-700 mb-6">108起纠纷中，超半数消费者仅获“部分支持”，25.9%诉求被完全驳回，数据揭示维权核心困境。</p>
+      <p class="text-gray-700 mb-6">108起纠纷中，超半数消费者仅获“部分支持”，25.9%诉求被完全驳回，数据揭示维权核心困境——证据不足、责任划分争议是主要障碍。</p>
       
       <figure class="bg-white p-4 rounded-lg shadow-sm mb-6">
         <h3 class="text-lg font-semibold text-gray-700 mb-4">图1：2024-2025年医美纠纷判决结果分布</h3>
-        <canvas id="judgmentChart" class="w-full h-[300px]"></canvas>
+        <canvas id="judgmentChart" class="w-full h-[200px]"></canvas>
         <p class="text-xs text-gray-500 mt-2">提示：hover柱子查看案件数+占比，点击“支持全部诉求”查看典型案例</p>
       </figure>
 
@@ -73,19 +92,20 @@
         <p class="text-sm text-gray-700 mt-2">
           案号：（2025）京03民终12380号<br>
           诉求：退还手术费6万元+赔偿医疗费3万元（合计9万元）<br>
-          判决：支持退还4万元，驳回医疗费诉求（因消费者未遵医嘱护理）
+          判决：支持退还4万元，驳回医疗费诉求（因消费者未遵医嘱护理，双方均有过错）
         </p>
       </div>
     </section>
 
+    <!-- 金额差异页 -->
     <section id="amount" class="mb-16">
       <h2 class="text-2xl font-bold mb-6 pb-2 border-b border-gray-200">金额缩水：判决金额仅为诉求的1/3</h2>
-      <p class="text-gray-700 mb-6">消费者平均诉求18.6万元，判决仅6.2万元，82%案件金额“缩水”，最高缩水75%。</p>
+      <p class="text-gray-700 mb-6">消费者平均诉求18.6万元，判决仅6.2万元，82%案件金额“缩水”，最高缩水75%（辽宁隆胸纠纷：诉求120万，判决30万）。</p>
       
       <figure class="bg-white p-4 rounded-lg shadow-sm mb-6">
         <h3 class="text-lg font-semibold text-gray-700 mb-4">图2：2024-2025年医美纠纷诉求金额vs判决金额</h3>
-        <canvas id="amountChart" class="w-full h-[300px]"></canvas>
-        <p class="text-xs text-gray-500 mt-2">提示：hover箱线查看中位数，点击异常值查看辽宁隆胸纠纷案例</p>
+        <canvas id="amountChart" class="w-full h-[200px]"></canvas>
+        <p class="text-xs text-gray-500 mt-2">提示：hover柱子查看具体金额，点击“最大值”查看辽宁隆胸纠纷案例</p>
       </figure>
 
       <div id="amountCaseDetail" class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 hidden mb-6">
@@ -93,72 +113,83 @@
         <p class="text-sm text-gray-700 mt-2">
           案号：（2025）辽07民终1864号<br>
           诉求：赔偿120万元（隆胸手术失败导致伤残）<br>
-          判决：支持30万元（仅认可直接医疗损失，精神损害赔偿仅支持5万元）
+          判决：支持30万元（仅认可直接医疗损失5万元、伤残赔偿金20万元、精神损害赔偿5万元，驳回过高诉求）
         </p>
       </div>
     </section>
 
+    <!-- 责任方分析页 -->
     <section id="defendant" class="mb-16">
       <h2 class="text-2xl font-bold mb-6 pb-2 border-b border-gray-200">谁在引发纠纷？民营机构占7成，38%涉资质问题</h2>
-      <p class="text-gray-700 mb-6">民营医美机构是主要责任方，无资质机构的纠纷中，83.3%消费者获支持。</p>
+      <p class="text-gray-700 mb-6">民营医美机构是主要责任方（71.3%），无资质机构的纠纷中，83.3%消费者获支持——资质问题是法院判定机构过错的关键依据。</p>
       
+      <!-- 被告身份环形图（修复为圆形） -->
       <figure class="bg-white p-4 rounded-lg shadow-sm mb-6">
-        <h3 class="text-lg font-semibold text-gray-700 mb-4">图3：被告身份分布</h3>
-        <canvas id="defendantChart" class="w-full h-[300px]"></canvas>
+        <h3 class="text-lg font-semibold text-gray-700 mb-4">图3：被告身份分布（修复为圆形）</h3>
+        <canvas id="defendantChart" class="w-full h-[200px]"></canvas>
         <p class="text-xs text-gray-500 mt-2">提示：hover扇区查看占比+纠纷率</p>
       </figure>
 
+      <!-- 被告资质与支持率→气泡图（替换原条形图+折线图） -->
       <figure class="bg-white p-4 rounded-lg shadow-sm mb-6">
-        <h3 class="text-lg font-semibold text-gray-700 mb-4">图4：被告资质与消费者支持率关系</h3>
-        <canvas id="qualificationChart" class="w-full h-[300px]"></canvas>
-        <p class="text-xs text-gray-500 mt-2">提示：柱状图=案件数，折线图=支持率</p>
+        <h3 class="text-lg font-semibold text-gray-700 mb-4">图4：被告资质与消费者支持率关系（气泡越大案件数越多）</h3>
+        <canvas id="qualificationChart" class="w-full h-[200px]"></canvas>
+        <p class="text-xs text-gray-500 mt-2">提示：hover气泡查看案件数+支持率</p>
       </figure>
     </section>
 
+    <!-- 高危项目页 -->
     <section id="risk" class="mb-16">
       <h2 class="text-2xl font-bold mb-6 pb-2 border-b border-gray-200">高危项目预警：手术类占45%，双眼皮/玻尿酸最易踩雷</h2>
-      <p class="text-gray-700 mb-6">手术类项目纠纷最多且诉求金额最高，双眼皮手术、玻尿酸注射是细分“重灾区”。</p>
+      <p class="text-gray-700 mb-6">手术类项目纠纷最多（45.4%）且诉求金额最高（平均22.8万元），双眼皮手术+效果不符、玻尿酸注射+感染是细分“重灾区”。</p>
       
+      <!-- 一级服务类型图（保留原横向柱状图） -->
       <figure class="bg-white p-4 rounded-lg shadow-sm mb-6">
         <h3 class="text-lg font-semibold text-gray-700 mb-4">图5：一级服务类型纠纷分布</h3>
-        <canvas id="riskTypeChart" class="w-full h-[300px]"></canvas>
+        <canvas id="riskTypeChart" class="w-full h-[200px]"></canvas>
         <p class="text-xs text-gray-500 mt-2">提示：hover柱子查看案件数+平均诉求金额</p>
       </figure>
 
+      <!-- 细分项目纠纷原因→热力图（替换原分组条形图） -->
       <figure class="bg-white p-4 rounded-lg shadow-sm mb-6">
-        <h3 class="text-lg font-semibold text-gray-700 mb-4">图6：高风险细分项目与纠纷原因分布</h3>
-        <canvas id="riskProjectChart" class="w-full h-[300px]"></canvas>
-        <p class="text-xs text-gray-500 mt-2">提示：颜色越深=案件数越多</p>
+        <h3 class="text-lg font-semibold text-gray-700 mb-4">图6：高风险细分项目与纠纷原因热力图（颜色越深案件越多）</h3>
+        <canvas id="riskProjectChart" class="w-full h-[250px]"></canvas>
+        <p class="text-xs text-gray-500 mt-2">提示：hover色块查看案件数</p>
       </figure>
     </section>
 
+    <!-- 维权建议页 -->
     <section id="suggestion" class="mb-16">
       <h2 class="text-2xl font-bold mb-6 pb-2 border-b border-gray-200">维权指南：3类证据显著提高胜率</h2>
-      <p class="text-gray-700 mb-6">有鉴定报告的案件支持率72.2%，无鉴定报告仅38.5%，证据是维权关键。</p>
+      <p class="text-gray-700 mb-6">有鉴定报告的案件支持率72.2%，无鉴定报告仅38.5%——证据是维权关键，选择合规机构、留存完整凭证能大幅降低维权难度。</p>
       
+      <!-- 维权成功率影响因素→点状图（替换原条形图） -->
       <figure class="bg-white p-4 rounded-lg shadow-sm mb-6">
-        <h3 class="text-lg font-semibold text-gray-700 mb-4">图7：维权成功率影响因素对比</h3>
-        <canvas id="suggestionChart" class="w-full h-[300px]"></canvas>
-        <p class="text-xs text-gray-500 mt-2">提示：hover柱子查看具体支持率</p>
+        <h3 class="text-lg font-semibold text-gray-700 mb-4">图7：维权成功率影响因素（点越高支持率越高，点越大案件数越多）</h3>
+        <canvas id="suggestionChart" class="w-full h-[200px]"></canvas>
+        <p class="text-xs text-gray-500 mt-2">提示：hover点查看支持率+案件数</p>
       </figure>
 
       <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
         <h4 class="font-bold text-green-700 mb-2">消费者维权实用建议</h4>
         <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
-          <li>选择机构：优先核查“医疗机构许可证+医师执业证”，避开无资质工作室</li>
-          <li>留存证据：签署完整医疗合同，保存缴费凭证、沟通记录、术前术后照片</li>
-          <li>鉴定维权：出现损害及时做“医疗损害鉴定”，是胜诉核心证据</li>
-          <li>理性诉求：诉求金额需匹配实际损失，避免过高诉求导致全额驳回</li>
+          <li>选择机构：优先核查“医疗机构许可证+医师执业证”，避开无资质工作室（无资质纠纷支持率83.3%，但维权成本高）</li>
+          <li>留存证据：签署完整医疗合同，保存缴费凭证、沟通记录、术前术后照片（有合同案件支持率68.3%）</li>
+          <li>鉴定维权：出现损害及时做“医疗损害鉴定”，是证明因果关系的核心证据（有鉴定报告支持率72.2%）</li>
+          <li>理性诉求：诉求金额需匹配实际损失（如医疗费用、伤残赔偿金），避免过高诉求导致全额驳回</li>
         </ul>
       </div>
     </section>
 
+    <!-- 结尾页 -->
     <section class="py-8 text-center border-t border-gray-200">
       <p class="text-gray-600 mb-4">数据整理：基于中国裁判文书网108条医美纠纷裁判文书（2024-2025）</p>
-      <p class="text-gray-500 text-sm">本数据仅用于公益科普，不构成法律建议</p>
+      <p class="text-gray-500 text-sm">本数据仅用于公益科普，不构成法律建议；如有维权需求，建议咨询专业律师</p>
     </section>
   </main>
 
+  <!-- 引入图表脚本（顺序：先基础图表，后地图） -->
   <script src="js/chart-init.js"></script>
+  <script src="js/map-init.js"></script>
 </body>
 </html>
