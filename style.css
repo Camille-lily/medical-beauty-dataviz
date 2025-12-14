@@ -1,0 +1,46 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.hidden {
+  display: none !important;
+}
+
+canvas {
+  max-width: 100%;
+  height: auto !important;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem !important;
+  }
+  h2 {
+    font-size: 1.5rem !important;
+  }
+  .p-8 {
+    padding: 1rem !important;
+  }
+  .py-16 {
+    padding-top: 4rem !important;
+    padding-bottom: 4rem !important;
+  }
+}
+
+a {
+  text-decoration: none;
+}
+
+.bg-red-50, .bg-blue-50, .bg-green-50 {
+  transition: all 0.3s ease;
+}
+
+.bg-red-50:hover, .bg-blue-50:hover, .bg-green-50:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
