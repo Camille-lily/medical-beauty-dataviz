@@ -1,3 +1,4 @@
+/* 全局重置与基础样式 */
 * {
   margin: 0;
   padding: 0;
@@ -5,73 +6,243 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: smooth; /* 平滑滚动 */
+  font-size: 16px;
 }
 
+body {
+  background-color: #f9fafb; /* 浅灰背景，更柔和 */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1f2937; /* 深灰文字，提升可读性 */
+  line-height: 1.5;
+}
+
+/* 导航栏样式优化 */
+nav {
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+nav a:hover {
+  color: #dc2626; /* hover红色加深，更醒目 */
+}
+
+/* 核心内容区样式 */
+main {
+  max-width: 90%; /* 加宽内容区，减少横向换行 */
+  margin: 0 auto;
+  padding: 1rem; /* 基础内边距 */
+}
+
+@media (min-width: 768px) {
+  main {
+    max-width: 80%;
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  main {
+    max-width: 70%;
+    padding: 2rem 4rem;
+  }
+}
+
+/* 章节样式优化 */
+section {
+  margin-bottom: 2rem; /* 紧凑章节间距，避免过多滚动 */
+  padding: 0.5rem 0;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+/* 图表容器通用样式（统一阴影、圆角） */
+figure {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  margin-bottom: 1rem;
+}
+
+/* Canvas图表通用适配（所有Chart.js图表） */
+canvas {
+  max-width: 100%;
+  height: auto !important;
+  border-radius: 0.375rem; /* 图表圆角，更美观 */
+}
+
+/* 中国地图容器专属样式 */
+#areaChart {
+  width: 100%;
+  height: 300px !important; /* 固定高度，确保地图完整显示 */
+  margin: 0 auto;
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+/* 热力图专属适配（避免色块溢出、优化边框） */
+canvas.heatmap {
+  border: 1px solid #f3f4f6;
+}
+
+/* 气泡图/点状图适配（避免点溢出容器） */
+canvas.scatter {
+  padding: 0.5rem;
+}
+
+/* 案例详情卡片样式优化 */
+.bg-red-50, .bg-blue-50, .bg-green-50 {
+  background-color: #fef2f2;
+  border-left: 4px solid #dc2626;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.bg-blue-50 {
+  background-color: #eff6ff;
+  border-left-color: #2563eb;
+}
+
+.bg-green-50 {
+  background-color: #ecfdf5;
+  border-left-color: #10b981;
+}
+
+.bg-red-50:hover, .bg-blue-50:hover, .bg-green-50:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* 隐藏类（案例详情默认隐藏） */
 .hidden {
   display: none !important;
 }
 
-/* 核心优化：图表高度缩小，一屏可看全 */
-canvas {
-  max-width: 100%;
-  height: 200px !important; /* 从300px缩到200px，减少纵向占用 */
-}
-
-/* 优化页面间距，减少滚动 */
-main {
-  max-width: 90% !important; /* 加宽内容区，减少横向换行 */
-  margin: 0 auto !important;
-  padding: 1rem !important; /* 减少内边距 */
-}
-
-section {
-  margin-bottom: 2rem !important; /* 减少章节间距，从16px→32px */
-  padding: 0 !important;
-}
-
-h2 {
-  font-size: 1.5rem !important; /* 缩小标题字号 */
-  margin-bottom: 1rem !important;
-  padding-bottom: 0.5rem !important;
-}
-
-h3 {
-  font-size: 1.1rem !important;
-  margin-bottom: 0.5rem !important;
-}
-
-p {
-  font-size: 0.9rem !important;
-  line-height: 1.4 !important;
-  margin-bottom: 1rem !important;
-}
-
-/* 响应式适配：手机端更紧凑 */
+/* 响应式适配：移动端优化 */
 @media (max-width: 768px) {
+  /* 缩小标题字号 */
   h1 {
     font-size: 1.8rem !important;
   }
+
   h2 {
     font-size: 1.2rem !important;
   }
-  canvas {
-    height: 180px !important; /* 手机端图表更矮 */
+
+  h3 {
+    font-size: 1rem !important;
   }
+
+  /* 缩小图表高度，适配手机屏幕 */
+  canvas {
+    height: 180px !important;
+  }
+
+  #areaChart {
+    height: 250px !important; /* 手机端地图高度缩小 */
+  }
+
+  /* 紧凑内边距 */
   .py-16 {
     padding-top: 2rem !important;
     padding-bottom: 2rem !important;
   }
+
+  .p-8 {
+    padding: 1rem !important;
+  }
+
+  /* 案例详情文字缩小 */
+  .bg-red-50 p, .bg-blue-50 p, .bg-green-50 p {
+    font-size: 0.85rem !important;
+  }
+
+  /* 导航栏简化 */
+  .md:flex {
+    display: none !important;
+  }
 }
 
-a {
-  text-decoration: none;
+/* 响应式适配：平板端 */
+@media (min-width: 768px) and (max-width: 1024px) {
+  canvas {
+    height: 190px !important;
+  }
+
+  #areaChart {
+    height: 280px !important;
+  }
 }
 
-.bg-red-50, .bg-blue-50, .bg-green-50 {
-  transition: all 0.3s ease;
+/* 结尾页样式 */
+section.border-t {
+  border-top: 2px solid #e5e7eb;
+  padding-top: 2rem;
+  margin-top: 2rem;
+  text-align: center;
 }
 
-.bg-red-50:hover, .bg-blue-50:hover, .bg-green-50:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+section.border-t p {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* 图表提示文字样式 */
+.text-xs {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* 导航栏按钮样式（移动端） */
+.md:hidden {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #4b5563;
+  cursor: pointer;
+}
+
+.md:hidden:hover {
+  color: #dc2626;
 }
