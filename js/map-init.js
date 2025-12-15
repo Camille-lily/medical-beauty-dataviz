@@ -1,85 +1,132 @@
-// 等待页面加载完成
 document.addEventListener('DOMContentLoaded', function() {
   // 初始化ECharts实例
-  const myChart = echarts.init(document.getElementById('areaChart'));
+  const mapChart = echarts.init(document.getElementById('areaChart'));
+  let mapLoaded = false;
 
-  // 地区案件数据（省份+案件数）
-  const areaData = [
-    { name: '北京', value: 28 },
-    { name: '上海', value: 22 },
-    { name: '辽宁', value: 15 },
-    { name: '广东', value: 12 },
-    { name: '浙江', value: 8 },
-    { name: '四川', value: 7 },
-    { name: '江苏', value: 5 },
-    { name: '山东', value: 4 },
-    { name: '湖北', value: 3 },
-    { name: '湖南', value: 2 },
-    { name: '其他', value: 12 } // 合并案件数<3的省份
-  ];
-
-  // 加载中国地图JSON数据（ECharts官方地图）
-  fetch('https://cdn.jsdelivr.net/npm/china-echarts-js@1.0.0/china.json')
-    .then(response => response.json())
-    .then(geoJson => {
-      // 注册地图
-      echarts.registerMap('china', geoJson);
-
-      // 配置选项
-      const option = {
-        tooltip: {
-          trigger: 'item',
-          formatter: function(params) {
-            const total = 108;
-            const percentage = ((params.value / total) * 100).toFixed(1) + '%';
-            return `${params.name}：${params.value}件（${percentage}）`;
-          }
-        },
-        visualMap: {
-          min: 0,
-          max: 30, // 最大值设为北京的28，留一点余量
-          left: 'left',
-          top: 'bottom',
-          text: ['案件数多', '案件数少'],
-          calculable: true,
-          inRange: {
-            color: ['#e0f7fa', '#b2ebf2', '#80deea', '#4dd0e1', '#26c6da', '#00bcd4', '#00acc1', '#0097a7', '#00838f', '#E53E3E'] // 颜色梯度（从浅到红）
-          }
-        },
-        series: [
-          {
-            name: '医美纠纷案件数',
-            type: 'map',
-            mapType: 'china',
-            roam: false, // 禁止缩放平移
-            label: {
-              show: true, // 显示省份名称
-              fontSize: 10
-            },
-            data: areaData,
-            emphasis: {
-              label: {
-                color: '#fff'
-              },
-              itemStyle: {
-                areaColor: '#E53E3E'
-              }
-            }
-          }
-        ]
-      };
-
-      // 渲染图表
-      myChart.setOption(option);
-
-      // 响应式适配窗口大小变化
-      window.addEventListener('resize', function() {
-        myChart.resize();
+  // ---------------------- 步骤1：从cases.json获取事发地数据并统计 ----------------------
+  fetch('data/cases.json')
+    .then(response => {
+      if (!response.ok) throw new Error('案件数据加载失败');
+      return response.json();
+    })
+    .then(casesData => {
+      // 统计每个省份的案件数
+      const provinceCaseCount = {};
+      casesData.forEach(caseItem => {
+        // 提取“事发地（省）”字段，处理特殊情况（如“北京市”→“北京”）
+        let province = caseItem['事发地（省）']?.trim() || '其他';
+        province = province.replace('市', '').replace('省', '').replace('自治区', '').replace('壮族', '').replace('维吾尔', '').replace('回族', '');
+        
+        if (province) {
+          provinceCaseCount[province] = (provinceCaseCount[province] || 0) + 1;
+        }
       });
+
+      // 过滤案件数为0的省份（仅保留有案件的）
+      const areaData = Object.entries(provinceCaseCount)
+        .filter(([province, count]) => count > 0)
+        .map(([name, value]) => ({ name, value }));
+
+      if (areaData.length === 0) {
+        throw new Error('无有效地域数据，请检查cases.json的“事发地（省）”字段');
+      }
+
+      // ---------------------- 步骤2：加载中国地图JSON数据 ----------------------
+      return fetch('https://cdn.jsdelivr.net/npm/china-echarts-js@1.0.0/china.json')
+        .then(mapResponse => {
+          if (!mapResponse.ok) throw new Error('地图数据加载失败');
+          return mapResponse.json();
+        })
+        .then(mapJson => {
+          // 注册中国地图
+          echarts.registerMap('china', mapJson);
+          mapLoaded = true;
+
+          // ---------------------- 步骤3：配置并渲染地图 ----------------------
+          const option = {
+            tooltip: {
+              trigger: 'item',
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              borderColor: '#E53E3E',
+              borderWidth: 1,
+              textStyle: { color: '#1f2937', fontSize: 10 },
+              padding: 8,
+              formatter: (params) => {
+                const totalCases = areaData.reduce((sum, item) => sum + item.value, 0);
+                const percentage = ((params.value / totalCases) * 100).toFixed(1) + '%';
+                return `<div><strong>${params.name}</strong></div>
+                        <div>案件数：${params.value}件</div>
+                        <div>占比：${percentage}</div>`;
+              }
+            },
+            visualMap: {
+              min: 0,
+              max: Math.max(...areaData.map(item => item.value)), // 最大值为实际最大案件数
+              left: 'left',
+              top: 'bottom',
+              text: ['案件数多', '案件数少'],
+              textStyle: { fontSize: 10, color: '#6b7280' },
+              calculable: true,
+              inRange: {
+                // 颜色梯度（从浅蓝到红色，匹配主题）
+                color: ['#e0f7fa', '#b2ebf2', '#80deea', '#4dd0e1', '#26c6da', '#00bcd4', '#E53E3E']
+              },
+              borderColor: '#e5e7eb'
+            },
+            series: [{
+              name: '医美纠纷案件数',
+              type: 'map',
+              mapType: 'china',
+              roam: false, // 禁止缩放和平移
+              label: {
+                show: true,
+                color: '#1f2937',
+                fontSize: 10,
+                fontWeight: 'normal'
+              },
+              data: areaData, // 仅传入有案件的省份数据（无案件省份自动隐藏）
+              emphasis: {
+                // hover时高亮样式
+                label: { color: '#ffffff', fontSize: 11 },
+                itemStyle: {
+                  areaColor: '#E53E3E',
+                  borderColor: '#ffffff',
+                  borderWidth: 1
+                }
+              },
+              // 确保无数据省份不显示
+              select: {
+                itemStyle: { areaColor: 'transparent', borderColor: 'transparent' }
+              }
+            }]
+          };
+
+          // 渲染图表
+          mapChart.setOption(option);
+          return true;
+        });
     })
     .catch(error => {
-      console.error('地图加载失败：', error);
-      // 失败降级为文字提示
-      document.getElementById('areaChart').innerHTML = '<p class="text-center text-gray-500">地图加载失败，请刷新页面重试</p>';
+      console.error('地域热力图初始化失败：', error);
+      // 加载失败降级显示
+      const errorHtml = `<div class="flex items-center justify-center h-full text-gray-500 text-sm">
+                          地图加载失败：${error.message}<br>
+                          请检查网络或cases.json字段
+                        </div>`;
+      document.getElementById('areaChart').innerHTML = errorHtml;
     });
+
+  // ---------------------- 窗口大小变化时自适应 ----------------------
+  window.addEventListener('resize', function() {
+    if (mapLoaded) {
+      mapChart.resize();
+    }
+  });
+
+  // ---------------------- 销毁图表（防止内存泄漏） ----------------------
+  window.addEventListener('beforeunload', function() {
+    if (mapLoaded) {
+      mapChart.dispose();
+    }
+  });
 });
