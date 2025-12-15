@@ -1,4 +1,4 @@
-/* 全局重置与基础样式 */
+/* 全局重置：统一浏览器默认样式 */
 * {
   margin: 0;
   padding: 0;
@@ -11,67 +11,101 @@ html {
 }
 
 body {
-  background-color: #f9fafb; /* 浅灰背景，更柔和 */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #f9fafb; /* 浅灰背景，柔和不刺眼 */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif;
   color: #1f2937; /* 深灰文字，提升可读性 */
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-/* 导航栏样式优化 */
+/* 导航栏样式：固定顶部+阴影 */
 nav {
   background-color: #ffffff;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
   z-index: 100;
+  padding: 0.75rem 1rem;
+}
+
+nav .max-w-4xl {
+  max-width: 85%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 nav a {
   text-decoration: none;
   color: inherit;
   transition: color 0.2s ease;
+  font-size: 0.875rem;
 }
 
 nav a:hover {
-  color: #dc2626; /* hover红色加深，更醒目 */
+  color: #dc2626; /*  hover红色加深，醒目 */
 }
 
-/* 核心内容区样式 */
+nav .font-bold {
+  font-size: 1rem;
+  color: #dc2626;
+}
+
+nav .hidden.md\\:flex {
+  display: flex;
+  gap: 1.5rem;
+}
+
+nav .md\\:hidden {
+  background: none;
+  border: none;
+  font-size: 0.875rem;
+  color: #4b5563;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+nav .md\\:hidden:hover {
+  color: #dc2626;
+}
+
+/* 核心内容区样式：居中+响应式宽度 */
 main {
-  max-width: 90%; /* 加宽内容区，减少横向换行 */
+  max-width: 85%;
   margin: 0 auto;
-  padding: 1rem; /* 基础内边距 */
+  padding: 1.5rem 1rem;
 }
 
 @media (min-width: 768px) {
   main {
     max-width: 80%;
-    padding: 2rem;
+    padding: 2rem 1.5rem;
   }
 }
 
 @media (min-width: 1024px) {
   main {
     max-width: 70%;
-    padding: 2rem 4rem;
+    padding: 2.5rem 2rem;
   }
 }
 
-/* 章节样式优化 */
+/* 章节样式：统一间距+标题层次 */
 section {
-  margin-bottom: 2rem; /* 紧凑章节间距，避免过多滚动 */
+  margin-bottom: 3rem;
   padding: 0.5rem 0;
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: #111827;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
 }
 
 h2 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 600;
   color: #111827;
   margin-bottom: 1rem;
@@ -80,62 +114,62 @@ h2 {
 }
 
 h3 {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: #1f2937;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 p {
   font-size: 0.9rem;
   color: #4b5563;
   margin-bottom: 1rem;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
-/* 图表容器通用样式（统一阴影、圆角） */
+/* 图表容器样式：统一背景+阴影+圆角 */
 figure {
   background-color: #ffffff;
-  padding: 1rem;
+  padding: 1.25rem;
   border-radius: 0.5rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-/* Canvas图表通用适配（所有Chart.js图表） */
+/* Canvas图表通用样式：适配容器 */
 canvas {
   max-width: 100%;
   height: auto !important;
-  border-radius: 0.375rem; /* 图表圆角，更美观 */
+  border-radius: 0.375rem;
 }
 
-/* 中国地图容器专属样式 */
+/* 词云图容器样式：背景+边框 */
+#keywordCloud, #evidenceCloud {
+  background-color: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  height: 300px !important;
+}
+
+/* 中国地图容器样式：固定高度 */
 #areaChart {
   width: 100%;
-  height: 300px !important; /* 固定高度，确保地图完整显示 */
-  margin: 0 auto;
+  height: 300px !important;
   border-radius: 0.375rem;
   overflow: hidden;
 }
 
-/* 热力图专属适配（避免色块溢出、优化边框） */
-canvas.heatmap {
-  border: 1px solid #f3f4f6;
-}
-
-/* 气泡图/点状图适配（避免点溢出容器） */
-canvas.scatter {
-  padding: 0.5rem;
-}
-
-/* 案例详情卡片样式优化 */
+/* 案例详情卡片样式：左侧边框+背景色 */
 .bg-red-50, .bg-blue-50, .bg-green-50 {
   background-color: #fef2f2;
   border-left: 4px solid #dc2626;
   padding: 1rem;
   border-radius: 0.375rem;
-  transition: all 0.3s ease;
-  margin-bottom: 1rem;
+  transition: box-shadow 0.3s ease;
+  margin-bottom: 1.5rem;
 }
 
 .bg-blue-50 {
@@ -152,68 +186,34 @@ canvas.scatter {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-/* 隐藏类（案例详情默认隐藏） */
+.bg-red-50 h4, .bg-blue-50 h4, .bg-green-50 h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.bg-red-50 p, .bg-blue-50 p, .bg-green-50 p {
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin-bottom: 0;
+  line-height: 1.6;
+}
+
+/* 隐藏类：案例详情默认隐藏 */
 .hidden {
   display: none !important;
 }
 
-/* 响应式适配：移动端优化 */
-@media (max-width: 768px) {
-  /* 缩小标题字号 */
-  h1 {
-    font-size: 1.8rem !important;
-  }
-
-  h2 {
-    font-size: 1.2rem !important;
-  }
-
-  h3 {
-    font-size: 1rem !important;
-  }
-
-  /* 缩小图表高度，适配手机屏幕 */
-  canvas {
-    height: 180px !important;
-  }
-
-  #areaChart {
-    height: 250px !important; /* 手机端地图高度缩小 */
-  }
-
-  /* 紧凑内边距 */
-  .py-16 {
-    padding-top: 2rem !important;
-    padding-bottom: 2rem !important;
-  }
-
-  .p-8 {
-    padding: 1rem !important;
-  }
-
-  /* 案例详情文字缩小 */
-  .bg-red-50 p, .bg-blue-50 p, .bg-green-50 p {
-    font-size: 0.85rem !important;
-  }
-
-  /* 导航栏简化 */
-  .md:flex {
-    display: none !important;
-  }
+/* 提示文字样式：小字号+浅颜色 */
+.text-xs {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.75rem;
+  text-align: center;
+  line-height: 1.4;
 }
 
-/* 响应式适配：平板端 */
-@media (min-width: 768px) and (max-width: 1024px) {
-  canvas {
-    height: 190px !important;
-  }
-
-  #areaChart {
-    height: 280px !important;
-  }
-}
-
-/* 结尾页样式 */
+/* 结尾页样式：顶部边框+居中 */
 section.border-t {
   border-top: 2px solid #e5e7eb;
   padding-top: 2rem;
@@ -224,25 +224,73 @@ section.border-t {
 section.border-t p {
   font-size: 0.85rem;
   color: #6b7280;
+  margin-bottom: 0.5rem;
 }
 
-/* 图表提示文字样式 */
-.text-xs {
-  font-size: 0.75rem;
-  color: #9ca3af;
-  margin-top: 0.5rem;
-  text-align: center;
+/* 响应式适配：移动端（<768px） */
+@media (max-width: 768px) {
+  /* 缩小标题字号 */
+  h1 {
+    font-size: 1.5rem !important;
+  }
+
+  h2 {
+    font-size: 1.2rem !important;
+  }
+
+  h3 {
+    font-size: 0.95rem !important;
+  }
+
+  /* 缩小图表高度 */
+  canvas {
+    height: 180px !important;
+  }
+
+  #keywordCloud, #evidenceCloud {
+    height: 250px !important;
+  }
+
+  #areaChart {
+    height: 250px !important;
+  }
+
+  /* 紧凑内边距 */
+  main {
+    padding: 1rem 0.5rem;
+    max-width: 95%;
+  }
+
+  figure {
+    padding: 1rem 0.75rem;
+  }
+
+  /* 隐藏电脑端导航 */
+  nav .hidden.md\\:flex {
+    display: none !important;
+  }
+
+  /* 案例详情文字缩小 */
+  .bg-red-50 p, .bg-blue-50 p, .bg-green-50 p {
+    font-size: 0.8rem !important;
+  }
 }
 
-/* 导航栏按钮样式（移动端） */
-.md:hidden {
-  background: none;
-  border: none;
-  font-size: 1rem;
-  color: #4b5563;
-  cursor: pointer;
-}
+/* 响应式适配：平板端（768px-1024px） */
+@media (min-width: 768px) and (max-width: 1024px) {
+  canvas {
+    height: 190px !important;
+  }
 
-.md:hidden:hover {
-  color: #dc2626;
+  #keywordCloud, #evidenceCloud {
+    height: 280px !important;
+  }
+
+  #areaChart {
+    height: 280px !important;
+  }
+
+  nav .max-w-4xl {
+    max-width: 90%;
+  }
 }
